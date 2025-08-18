@@ -1,0 +1,54 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-08-11 13:53:40.586623",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "itemcode",
+  "almacen",
+  "descuento",
+  "iva"
+ ],
+ "fields": [
+  {
+   "fieldname": "itemcode",
+   "fieldtype": "Link",
+   "label": "C\u00f3digo Articulo",
+   "options": "Item",
+   "unique": 1
+  },
+  {
+   "fieldname": "descuento",
+   "fieldtype": "Percent",
+   "label": "Descuento centralizado",
+   "precision": "6"
+  },
+  {
+   "fieldname": "iva",
+   "fieldtype": "Percent",
+   "label": "IVA"
+  },
+  {
+   "fieldname": "almacen",
+   "fieldtype": "Link",
+   "label": "Almacen",
+   "options": "Warehouse"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-08-15 14:13:26.450122",
+ "modified_by": "Administrator",
+ "module": "Edinova",
+ "name": "Campos descuentos",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

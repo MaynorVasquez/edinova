@@ -5,6 +5,28 @@ app_description = "Consumo de ordnes de venta por parte de walmart"
 app_email = "vasquez158@gmail.com"
 app_license = "mit"
 
+fixtures = [
+    {
+        "doctype": "Workspace",
+        "filters": [
+            ["name", "in", ["Edinova"]]
+        ]
+    },
+    {
+        "dt": "Custom Field",
+        "filters": [
+            ["name", "in", [
+                "Sales Order Item-custom_precio_walmart",
+                "Sales Order Item-custom_diferencia_precio",
+                "Item-custom_ean"
+            ]]
+        ]
+    },
+    {
+        "dt": "Credential"
+    }
+]
+
 # Apps
 # ------------------
 

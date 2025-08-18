@@ -1,0 +1,64 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-08-11 13:55:49.524828",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "almacen_defecto",
+  "iva",
+  "productos"
+ ],
+ "fields": [
+  {
+   "fieldname": "productos",
+   "fieldtype": "Table",
+   "label": "Productos",
+   "options": "Campos descuentos"
+  },
+  {
+   "fieldname": "almacen_defecto",
+   "fieldtype": "Link",
+   "label": "Almacen por defecto",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "iva",
+   "fieldtype": "Link",
+   "label": "Impuesto por defecto",
+   "options": "Sales Taxes and Charges Template"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Empresa",
+   "options": "Company"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-08-16 18:12:20.909559",
+ "modified_by": "Administrator",
+ "module": "Edinova",
+ "name": "Descuentos Negociados",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
