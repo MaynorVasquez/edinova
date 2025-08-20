@@ -24,6 +24,12 @@ fixtures = [
     },
     {
         "dt": "Credential"
+    },
+    {
+        "dt": "Client Script",
+        "filters": [
+            ["module", "=", "Edinova"]
+        ]
     }
 ]
 

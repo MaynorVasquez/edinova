@@ -1,0 +1,13 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Sales Order",
+  "enabled": 1,
+  "modified": "2025-08-20 09:14:42.967282",
+  "module": "Edinova",
+  "name": "Diferencia de precio Walmart Vs SAP",
+  "script": "frappe.ui.form.on('Sales Order Item', {\r\n    rate: function(frm, cdt, cdn) {\r\n        calcular_diferencia(frm, cdt, cdn);\r\n    },\r\n    custom_precio_walmart: function(frm, cdt, cdn) {\r\n        calcular_diferencia(frm, cdt, cdn);\r\n    }\r\n});\r\n\r\nfunction calcular_diferencia(frm, cdt, cdn) {\r\n    let row = locals[cdt][cdn];\r\n    let precio_json = parseFloat(row.custom_precio_walmart) || 0;\r\n    let precio_erp = parseFloat(row.rate) || 0;\r\n\r\n    let diferencia = precio_json - precio_erp;\r\n    row.custom_diferencia_precio = parseFloat(diferencia.toFixed(6));\r\n\r\n    frm.refresh_field('items'); // refresca toda la tabla\r\n}",
+  "view": "Form"
+ }
+]
