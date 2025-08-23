@@ -23,7 +23,7 @@ def crear_ordenes_venta(fecha):
             print(f"Orden {numero_po} ya existe, saltando")
             continue
 
-        nombre_cliente = ov["buyer"]["name"]
+        nombre_cliente = frappe.db.get_single_value("Descuentos Negociados", "cliente")
         cliente = frappe.db.get_value("Customer", {"customer_name": nombre_cliente}, "customer_name")
         if not cliente:
             frappe.log_error(f"Cliente con NIT {nombre_cliente} no encontrado", "Import OV")
@@ -125,7 +125,7 @@ def crear_ordenes_venta(fecha):
             })
 
         # Calcular valores obligatorios antes de insert
-        #sales_order.set_missing_values()
+        sales_order.set_missing_values()
         sales_order.calculate_taxes_and_totals()
 
         print(f"Insertando orden {numero_po} con {len(sales_order.items)} items")
