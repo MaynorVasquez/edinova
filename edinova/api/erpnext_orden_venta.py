@@ -125,7 +125,7 @@ def crear_ordenes_venta(fecha):
             })
 
         # Calcular valores obligatorios antes de insert
-        sales_order.set_missing_values()
+        #sales_order.set_missing_values()
         sales_order.calculate_taxes_and_totals()
 
         print(f"Insertando orden {numero_po} con {len(sales_order.items)} items")
