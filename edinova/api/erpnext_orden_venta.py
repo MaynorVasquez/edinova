@@ -122,6 +122,8 @@ def crear_ordenes_venta(fecha):
                 "custom_precio_walmart": precio,
                 "custom_diferencia_precio": diferencia
             })
+        
+        print(f"datos del payload: {sales_order_payload}")
 
         # Calcular valores obligatorios antes de insert
         sales_order.set_missing_values()
