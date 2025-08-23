@@ -23,10 +23,9 @@ def crear_ordenes_venta(fecha):
             print(f"Orden {numero_po} ya existe, saltando")
             continue
 
-        nombre_cliente = frappe.db.get_single_value("Descuentos Negociados", "cliente")
-        cliente = frappe.db.get_value("Customer", {"customer_name": nombre_cliente}, "customer_name")
+        cliente = frappe.db.get_single_value("Descuentos Negociados", "cliente")
         if not cliente:
-            frappe.log_error(f"Cliente con NIT {nombre_cliente} no encontrado", "Import OV")
+            frappe.log_error(f"No se encuentra {cliente} no encontrado")
             continue
 
         price_list = frappe.db.get_value("Customer", cliente, "default_price_list")
