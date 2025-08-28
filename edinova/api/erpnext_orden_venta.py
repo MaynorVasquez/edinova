@@ -4,7 +4,6 @@ from datetime import datetime
 from .edinova_orden_venta import get_ordenes_venta
 
 def crear_ordenes_venta(fecha):
-    import json
     ordenes = get_ordenes_venta(fecha)
     print(f"Órdenes recibidas: {len(ordenes)}")
 
@@ -140,7 +139,7 @@ def crear_ordenes_venta(fecha):
             continue
 
         # Guardar solo el payload construido
-        ordenes_json.append(sales_order_payload)
+        ordenes_json.append(ordenes)
 
     # Imprimir JSON limpio de todas las órdenes procesadas
     import json
@@ -148,7 +147,7 @@ def crear_ordenes_venta(fecha):
 
     return {
         "total": len(ordenes),
-        "data": ordenes_json
+        "data": ordenes
     }
 
 
