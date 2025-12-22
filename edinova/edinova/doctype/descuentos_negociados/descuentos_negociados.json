@@ -6,6 +6,7 @@
  "engine": "InnoDB",
  "field_order": [
   "company",
+  "cardcode",
   "almacen_defecto",
   "iva",
   "productos"
@@ -34,13 +35,19 @@
    "fieldtype": "Link",
    "label": "Empresa",
    "options": "Company"
+  },
+  {
+   "fieldname": "cardcode",
+   "fieldtype": "Link",
+   "label": "Cliente",
+   "options": "Customer"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-08-16 18:12:20.909559",
+ "modified": "2025-12-22 09:00:02.789527",
  "modified_by": "Administrator",
  "module": "Edinova",
  "name": "Descuentos Negociados",

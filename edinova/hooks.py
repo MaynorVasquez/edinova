@@ -23,7 +23,8 @@ fixtures = [
         ]
     },
     {
-        "dt": "Credential"
+        "dt": "Credential",
+        "dt": "Descuentos Negociados"
     }
 ]
 
