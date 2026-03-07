@@ -18,6 +18,7 @@ fixtures = [
             ["name", "in", [
                 "Sales Order Item-custom_precio_walmart",
                 "Sales Order Item-custom_diferencia_precio",
+                "Sales Order-custom_gln",           # <- nuevo
                 "Item-custom_ean"
             ]]
         ]
