@@ -9,7 +9,8 @@
   "status",
   "total_registros",
   "detalle",
-  "error"
+  "error",
+  "payload_original"
  ],
  "fields": [
   {
@@ -23,7 +24,8 @@
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Estado",
-   "options": "Exitoso\nError"
+   "options": "En proceso\nExitoso\nError\nBloqueado",
+   "read_only": 1
   },
   {
    "fieldname": "total_registros",
@@ -39,6 +41,14 @@
    "fieldname": "error",
    "fieldtype": "Long Text",
    "label": "Error"
+  },
+  {
+   "description": "JSON crudo recibido del API de Walmart antes de cualquier procesamiento. Se accede desde el botón 'Ver payload original'.",
+   "fieldname": "payload_original",
+   "fieldtype": "Long Text",
+   "hidden": 1,
+   "label": "Payload original",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,

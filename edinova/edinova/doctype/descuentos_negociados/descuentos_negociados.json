@@ -9,6 +9,7 @@
   "cardcode",
   "almacen_defecto",
   "iva",
+  "dias_entrega",
   "productos"
  ],
  "fields": [
@@ -41,6 +42,14 @@
    "fieldtype": "Link",
    "label": "Cliente",
    "options": "Customer"
+  },
+  {
+   "default": "7",
+   "description": "Días a sumar a la fecha actual para calcular la fecha de entrega",
+   "fieldname": "dias_entrega",
+   "fieldtype": "Int",
+   "label": "Días de entrega",
+   "non_negative": 1
   }
  ],
  "grid_page_length": 50,

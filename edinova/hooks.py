@@ -1,7 +1,7 @@
 app_name = "edinova"
 app_title = "Edinova"
 app_publisher = "Maynor Vasquez"
-app_description = "Consumo de ordnes de venta por parte de walmart"
+app_description = "Consumo de ordenes de venta por parte de walmart"
 app_email = "vasquez158@gmail.com"
 app_license = "mit"
 
@@ -24,7 +24,9 @@ fixtures = [
         ]
     },
     {
-        "dt": "Credential",
+        "dt": "Credential"
+    },
+    {
         "dt": "Descuentos Negociados"
     }
 ]
