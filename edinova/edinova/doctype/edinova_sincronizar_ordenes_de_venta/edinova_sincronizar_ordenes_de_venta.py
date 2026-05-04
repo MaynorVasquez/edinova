@@ -13,6 +13,26 @@ LOCK_TTL_SEC = 1800  # 30 minutos
 
 
 class EdinovaSincronizarOrdenesdeVenta(Document):
+    def onload(self):
+        if self.status == "En proceso" and self._es_estancado():
+            self._marcar_estancado()
+        _sweep_stale_syncs(exclude=self.name)
+
+    def _es_estancado(self) -> bool:
+        if not self.modified:
+            return False
+        cutoff = frappe.utils.add_to_date(None, seconds=-LOCK_TTL_SEC)
+        return frappe.utils.get_datetime(self.modified) < frappe.utils.get_datetime(cutoff)
+
+    def _marcar_estancado(self) -> None:
+        msg = (
+            f"Sincronización abandonada: el worker no reportó fin en más de "
+            f"{LOCK_TTL_SEC // 60} min (probable reinicio del bench, OOM o crash)."
+        )
+        self.db_set("status", "Error", update_modified=False)
+        self.db_set("error", msg, update_modified=False)
+        logger.warning(f"Sweep onload: {self.name} marcado como Error por timeout")
+
     def after_insert(self):
         if not self.fecha_inicio:
             return
@@ -29,6 +49,39 @@ class EdinovaSincronizarOrdenesdeVenta(Document):
         )
 
 
+def _sweep_stale_syncs(exclude: str | None = None) -> int:
+    """Marca como 'Error' los docs en 'En proceso' cuyo modified es más viejo que LOCK_TTL_SEC.
+
+    Limpieza oportunista invocada desde onload y _adquirir_lock — evita necesitar un cron
+    dedicado: el barrido solo corre cuando hay actividad real del usuario o un sync nuevo
+    arranca. La query es indexada y la mayor parte del tiempo retorna 0 filas.
+    """
+    cutoff = frappe.utils.add_to_date(None, seconds=-LOCK_TTL_SEC)
+    filters = {"status": "En proceso", "modified": ["<", cutoff]}
+    if exclude:
+        filters["name"] = ["!=", exclude]
+    stale = frappe.get_all(
+        "Edinova Sincronizar Ordenes de Venta",
+        filters=filters,
+        pluck="name",
+    )
+    if not stale:
+        return 0
+    msg = (
+        f"Sincronización abandonada: el worker no reportó fin en más de "
+        f"{LOCK_TTL_SEC // 60} min (probable reinicio del bench, OOM o crash)."
+    )
+    for name in stale:
+        frappe.db.set_value(
+            "Edinova Sincronizar Ordenes de Venta",
+            name,
+            {"status": "Error", "error": msg},
+            update_modified=False,
+        )
+        logger.warning(f"Sweep: {name} marcado como Error por timeout de worker")
+    return len(stale)
+
+
 def _adquirir_lock(docname: str) -> str | None:
     """Intenta tomar el lock global. Devuelve None si lo tomó, o el dueño actual.
 
@@ -36,6 +89,7 @@ def _adquirir_lock(docname: str) -> str | None:
     el job anterior terminó pero el ``finally`` no llegó a liberarlo, p. ej.
     por un ``bench restart`` o un OOM), lo considera estancado y lo sobrescribe.
     """
+    _sweep_stale_syncs(exclude=docname)
     cache = frappe.cache()
     actual = cache.get_value(LOCK_KEY)
     if actual:

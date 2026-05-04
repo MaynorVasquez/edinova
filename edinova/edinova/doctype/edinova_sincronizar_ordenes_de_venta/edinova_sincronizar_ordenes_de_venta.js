@@ -1,3 +1,5 @@
+let sync_dialog = null;
+
 frappe.ui.form.on("Edinova Sincronizar Ordenes de Venta", {
     refresh(frm) {
         render_detalle(frm);
@@ -11,10 +13,10 @@ frappe.ui.form.on("Edinova Sincronizar Ordenes de Venta", {
             frm.add_custom_button(__("Ver payload original"), () => mostrar_payload(frm));
         }
 
-        if (frm.doc.status === "En proceso") {
-            frm.dashboard.set_headline_alert(
-                __("Sincronización en proceso… La página se actualizará automáticamente al terminar.")
-            );
+        if (!frm.is_new() && frm.doc.status === "En proceso") {
+            mostrar_modal_sync();
+        } else {
+            cerrar_modal_sync();
         }
     },
 });
@@ -23,9 +25,48 @@ function bind_realtime(frm) {
     frappe.realtime.off("edinova_sync_done");
     frappe.realtime.on("edinova_sync_done", (data) => {
         if (data && data.name === frm.doc.name) {
+            cerrar_modal_sync();
             frm.reload_doc();
         }
     });
+}
+
+function mostrar_modal_sync() {
+    if (sync_dialog) return;
+
+    sync_dialog = new frappe.ui.Dialog({
+        title: __("Sincronizando con Walmart"),
+        static: true,
+        fields: [
+            {
+                fieldtype: "HTML",
+                fieldname: "msg",
+                options: `
+                    <div style="text-align:center;padding:24px 12px;">
+                        <div class="spinner-border text-primary" role="status"
+                             style="width:3rem;height:3rem;border-width:.3em;"></div>
+                        <p style="margin-top:18px;font-size:14px;font-weight:500;">
+                            ${__("Descargando órdenes desde Walmart…")}
+                        </p>
+                        <p style="color:#888;font-size:12px;margin-bottom:0;">
+                            ${__("Por favor no cierres esta pestaña. El proceso tarda solo unos segundos y se cerrará automáticamente al terminar.")}
+                        </p>
+                    </div>
+                `,
+            },
+        ],
+        secondary_action_label: __("Cerrar de todos modos"),
+        secondary_action: () => cerrar_modal_sync(),
+    });
+    sync_dialog.show();
+    sync_dialog.get_close_btn().hide();
+}
+
+function cerrar_modal_sync() {
+    if (sync_dialog) {
+        sync_dialog.hide();
+        sync_dialog = null;
+    }
 }
 
 function parse_detalle(frm) {
