@@ -45,6 +45,7 @@ class EdinovaSincronizarOrdenesdeVenta(Document):
             timeout=1500,
             docname=self.name,
             fecha_inicio=str(self.fecha_inicio),
+            triggered_by=frappe.session.user,
             enqueue_after_commit=True,
         )
 
@@ -121,7 +122,7 @@ def _liberar_lock(docname: str) -> None:
         cache.delete_value(LOCK_KEY)
 
 
-def run_sync(docname: str, fecha_inicio: str) -> None:
+def run_sync(docname: str, fecha_inicio: str, triggered_by: str | None = None) -> None:
     """Orquesta la sincronización en background.
 
     Pasos: lock → descargar payload → persistir payload (incluso si todo lo demás
@@ -177,9 +178,13 @@ def run_sync(docname: str, fecha_inicio: str) -> None:
 
     finally:
         _liberar_lock(docname)
+        # Publicamos al room del usuario (auto-joined al conectar el socket) en vez
+        # del room del doc, que requiere un doc_subscribe asíncrono y puede
+        # perderse si el sync termina antes de que el cliente se suscriba.
+        target_user = triggered_by or doc.owner
         frappe.publish_realtime(
             "edinova_sync_done",
             {"name": docname, "status": doc.status},
-            doctype="Edinova Sincronizar Ordenes de Venta",
-            docname=docname,
+            user=target_user,
+            after_commit=True,
         )

@@ -1,4 +1,5 @@
 let sync_dialog = null;
+let sync_poll_timer = null;
 
 frappe.ui.form.on("Edinova Sincronizar Ordenes de Venta", {
     refresh(frm) {
@@ -14,7 +15,7 @@ frappe.ui.form.on("Edinova Sincronizar Ordenes de Venta", {
         }
 
         if (!frm.is_new() && frm.doc.status === "En proceso") {
-            mostrar_modal_sync();
+            mostrar_modal_sync(frm);
         } else {
             cerrar_modal_sync();
         }
@@ -31,8 +32,17 @@ function bind_realtime(frm) {
     });
 }
 
-function mostrar_modal_sync() {
+function mostrar_modal_sync(frm) {
     if (sync_dialog) return;
+
+    // Fallback: si el evento realtime se pierde (socket caído, reconexión, etc.),
+    // recargamos el doc cada 5s; cuando el status cambie, refresh cierra el modal.
+    if (sync_poll_timer) clearInterval(sync_poll_timer);
+    sync_poll_timer = setInterval(() => {
+        if (frm && frm.doc && frm.doc.status === "En proceso") {
+            frm.reload_doc();
+        }
+    }, 5000);
 
     sync_dialog = new frappe.ui.Dialog({
         title: __("Sincronizando con Walmart"),
@@ -63,6 +73,10 @@ function mostrar_modal_sync() {
 }
 
 function cerrar_modal_sync() {
+    if (sync_poll_timer) {
+        clearInterval(sync_poll_timer);
+        sync_poll_timer = null;
+    }
     if (sync_dialog) {
         sync_dialog.hide();
         sync_dialog = null;
