@@ -115,7 +115,7 @@ def save_order(ov,gln_item,ordenes_json):
     }
     # Agregar items al documento y al payload
     if not gln_item.get("items") or len(gln_item.get("items", [])) == 0:
-        frappe.log_error(f"Item {gln_item['gln']} no tiene items", "Import OV")
+        #frappe.log_error(f"Item {gln_item['gln']} no tiene items", "Import OV")
         print(f"❌ Orden {ov['purchaseOrderNumber']['po']} con GLN {gln_item['gln']} no tiene items, saltando")
         return
     
