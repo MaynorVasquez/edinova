@@ -1,16 +1,16 @@
 [
  {
-  "almacen_defecto": "65-Bodemax B14 - YAESTA",
+  "almacen_defecto": "65-Michatoya - YAESTA",
   "cardcode": "CLI00001",
   "company": "Productos Alimenticios YAESTA, S.A.",
   "docstatus": 0,
   "doctype": "Descuentos Negociados",
   "iva": "Guatemala Tax - YAESTA",
-  "modified": "2026-05-12 10:22:58.319071",
+  "modified": "2026-05-17 22:05:11.623340",
   "name": "Descuentos Negociados",
   "productos": [
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - BQ00028",
     "iva": 12.0,
@@ -19,7 +19,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - BQ00039",
     "iva": 12.0,
@@ -28,7 +28,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 0.0,
     "itemcode": "YAESTA - BQ00055",
     "iva": 0.0,
@@ -37,7 +37,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - BQ00063",
     "iva": 12.0,
@@ -46,7 +46,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - BQ00116",
     "iva": 12.0,
@@ -55,7 +55,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - BQ00117",
     "iva": 12.0,
@@ -64,7 +64,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - BQ00120",
     "iva": 12.0,
@@ -73,7 +73,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - BQ00121",
     "iva": 12.0,
@@ -82,7 +82,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - BQ00151",
     "iva": 12.0,
@@ -91,7 +91,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - BQ00181",
     "iva": 12.0,
@@ -100,7 +100,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - BQ00182",
     "iva": 12.0,
@@ -109,7 +109,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - BQ00222",
     "iva": 12.0,
@@ -118,7 +118,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - BQ00273",
     "iva": 12.0,
@@ -127,7 +127,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - BQ00277",
     "iva": 12.0,
@@ -136,7 +136,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - BQ00283",
     "iva": 12.0,
@@ -145,7 +145,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - BQ00284",
     "iva": 12.0,
@@ -154,7 +154,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "64-Mixco Norte C-14 - YAESTA",
+    "almacen": "64-Mixco C14 - YAESTA",
     "descuento": 6.75,
     "itemcode": "YAESTA - CG00020",
     "iva": 12.0,
@@ -163,7 +163,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "64-Mixco Norte C-14 - YAESTA",
+    "almacen": "64-Mixco C14 - YAESTA",
     "descuento": 0.0,
     "itemcode": "YAESTA - CG00039",
     "iva": 0.0,
@@ -172,7 +172,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "64-Mixco Norte C-14 - YAESTA",
+    "almacen": "64-Mixco C14 - YAESTA",
     "descuento": 6.75,
     "itemcode": "YAESTA - CG00024",
     "iva": 12.0,
@@ -181,7 +181,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "64-Mixco Norte C-14 - YAESTA",
+    "almacen": "64-Mixco C14 - YAESTA",
     "descuento": 6.75,
     "itemcode": "YAESTA - CG00030",
     "iva": 12.0,
@@ -190,7 +190,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "64-Mixco Norte C-14 - YAESTA",
+    "almacen": "64-Mixco C14 - YAESTA",
     "descuento": 6.75,
     "itemcode": "YAESTA - CG00032",
     "iva": 12.0,
@@ -199,7 +199,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "64-Mixco Norte C-14 - YAESTA",
+    "almacen": "64-Mixco C14 - YAESTA",
     "descuento": 6.75,
     "itemcode": "YAESTA - CG00041",
     "iva": 12.0,
@@ -208,7 +208,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "64-Mixco Norte C-14 - YAESTA",
+    "almacen": "64-Mixco C14 - YAESTA",
     "descuento": 6.75,
     "itemcode": "YAESTA - CG00066",
     "iva": 12.0,
@@ -217,7 +217,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "64-Mixco Norte C-14 - YAESTA",
+    "almacen": "64-Mixco C14 - YAESTA",
     "descuento": 6.75,
     "itemcode": "YAESTA - CG00067",
     "iva": 12.0,
@@ -226,7 +226,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "64-Mixco Norte C-14 - YAESTA",
+    "almacen": "64-Mixco C14 - YAESTA",
     "descuento": 6.75,
     "itemcode": "YAESTA - CG00084",
     "iva": 12.0,
@@ -235,7 +235,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "64-Mixco Norte C-14 - YAESTA",
+    "almacen": "64-Mixco C14 - YAESTA",
     "descuento": 6.75,
     "itemcode": "YAESTA - CG00091",
     "iva": 12.0,
@@ -244,7 +244,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "64-Mixco Norte C-14 - YAESTA",
+    "almacen": "64-Mixco C14 - YAESTA",
     "descuento": 6.75,
     "itemcode": "YAESTA - CG00112",
     "iva": 12.0,
@@ -253,7 +253,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "64-Mixco Norte C-14 - YAESTA",
+    "almacen": "64-Mixco C14 - YAESTA",
     "descuento": 6.75,
     "itemcode": "YAESTA - CG00114",
     "iva": 12.0,
@@ -262,7 +262,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "64-Mixco Norte C-14 - YAESTA",
+    "almacen": "64-Mixco C14 - YAESTA",
     "descuento": 6.75,
     "itemcode": "YAESTA - CG00115",
     "iva": 12.0,
@@ -271,7 +271,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "64-Mixco Norte C-14 - YAESTA",
+    "almacen": "64-Mixco C14 - YAESTA",
     "descuento": 6.75,
     "itemcode": "YAESTA - CG00122",
     "iva": 12.0,
@@ -280,7 +280,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "64-Mixco Norte C-14 - YAESTA",
+    "almacen": "64-Mixco C14 - YAESTA",
     "descuento": 6.75,
     "itemcode": "YAESTA - CG00181",
     "iva": 12.0,
@@ -289,7 +289,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "64-Mixco Norte C-14 - YAESTA",
+    "almacen": "64-Mixco C14 - YAESTA",
     "descuento": 6.75,
     "itemcode": "YAESTA - CG00179",
     "iva": 12.0,
@@ -298,7 +298,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "64-Mixco Norte C-14 - YAESTA",
+    "almacen": "64-Mixco C14 - YAESTA",
     "descuento": 6.75,
     "itemcode": "YAESTA - CG00187",
     "iva": 12.0,
@@ -307,7 +307,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "64-Mixco Norte C-14 - YAESTA",
+    "almacen": "64-Mixco C14 - YAESTA",
     "descuento": 6.75,
     "itemcode": "YAESTA - CG00188",
     "iva": 12.0,
@@ -316,7 +316,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "64-Mixco Norte C-14 - YAESTA",
+    "almacen": "64-Mixco C14 - YAESTA",
     "descuento": 6.75,
     "itemcode": "YAESTA - CG00189",
     "iva": 12.0,
@@ -325,7 +325,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "64-Mixco Norte C-14 - YAESTA",
+    "almacen": "64-Mixco C14 - YAESTA",
     "descuento": 6.75,
     "itemcode": "YAESTA - CG00190",
     "iva": 12.0,
@@ -334,7 +334,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "64-Mixco Norte C-14 - YAESTA",
+    "almacen": "64-Mixco C14 - YAESTA",
     "descuento": 6.75,
     "itemcode": "YAESTA - CG00191",
     "iva": 12.0,
@@ -343,7 +343,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - CV00001",
     "iva": 12.0,
@@ -352,7 +352,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - EP00010",
     "iva": 12.0,
@@ -361,7 +361,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - EP00012",
     "iva": 12.0,
@@ -370,7 +370,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - EP00024",
     "iva": 12.0,
@@ -379,7 +379,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - EP00047",
     "iva": 12.0,
@@ -388,7 +388,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - SC00002",
     "iva": 12.0,
@@ -397,7 +397,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - SC00004",
     "iva": 12.0,
@@ -406,7 +406,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - SC00007",
     "iva": 12.0,
@@ -415,7 +415,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - SC00022",
     "iva": 12.0,
@@ -424,7 +424,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - SC00028",
     "iva": 12.0,
@@ -433,7 +433,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 0.0,
     "itemcode": "YAESTA - SL00003",
     "iva": 0.0,
@@ -442,7 +442,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - SL00005",
     "iva": 12.0,
@@ -451,7 +451,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - SL00007",
     "iva": 12.0,
@@ -460,7 +460,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - SL00008",
     "iva": 12.0,
@@ -469,7 +469,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - SL00011",
     "iva": 12.0,
@@ -478,7 +478,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - SL00013",
     "iva": 12.0,
@@ -487,7 +487,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - SL00017",
     "iva": 12.0,
@@ -496,7 +496,7 @@
     "parenttype": "Descuentos Negociados"
    },
    {
-    "almacen": "65-Bodemax B14 - YAESTA",
+    "almacen": "65-Michatoya - YAESTA",
     "descuento": 4.25,
     "itemcode": "YAESTA - SL00022",
     "iva": 12.0,
