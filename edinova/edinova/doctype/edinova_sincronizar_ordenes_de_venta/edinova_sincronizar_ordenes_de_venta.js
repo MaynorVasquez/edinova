@@ -1,9 +1,11 @@
 let sync_dialog = null;
 let sync_poll_timer = null;
+let sync_realtime_handler = null;
 
 frappe.ui.form.on("Edinova Sincronizar Ordenes de Venta", {
     refresh(frm) {
         render_detalle(frm);
+        render_estado(frm);
         bind_realtime(frm);
 
         if (frm.doc.detalle) {
@@ -23,13 +25,37 @@ frappe.ui.form.on("Edinova Sincronizar Ordenes de Venta", {
 });
 
 function bind_realtime(frm) {
-    frappe.realtime.off("edinova_sync_done");
-    frappe.realtime.on("edinova_sync_done", (data) => {
+    if (sync_realtime_handler) {
+        frappe.realtime.off("edinova_sync_done", sync_realtime_handler);
+    }
+    sync_realtime_handler = (data) => {
         if (data && data.name === frm.doc.name) {
             cerrar_modal_sync();
             frm.reload_doc();
         }
-    });
+    };
+    frappe.realtime.on("edinova_sync_done", sync_realtime_handler);
+}
+
+function render_estado(frm) {
+    if (frm.doc.status === "Error") {
+        const lines = String(frm.doc.error || "")
+            .split("\n")
+            .map((line) => line.trim())
+            .filter(Boolean);
+        const detail = lines.length ? lines[lines.length - 1] : __("Sin detalle disponible");
+        frm.dashboard.set_headline_alert(
+            `${__("La sincronización terminó con error:")} ${frappe.utils.escape_html(detail)}`,
+            "red"
+        );
+    } else if (frm.doc.status === "Bloqueado") {
+        frm.dashboard.set_headline_alert(
+            __("La sincronización no inició porque ya existe otro proceso en curso."),
+            "orange"
+        );
+    } else {
+        frm.dashboard.clear_headline();
+    }
 }
 
 function mostrar_modal_sync(frm) {
@@ -264,7 +290,10 @@ function exportar_csv(frm) {
         .map((r) =>
             r
                 .map((cell) => {
-                    const v = cell == null ? "" : String(cell);
+                    let v = cell == null ? "" : String(cell);
+                    if (typeof cell === "string" && /^[\t\r ]*[=+\-@]/.test(v)) {
+                        v = `'${v}`;
+                    }
                     return /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v;
                 })
                 .join(",")

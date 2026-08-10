@@ -30,17 +30,20 @@
   {
    "fieldname": "total_registros",
    "fieldtype": "Int",
-   "label": "Total Registros"
+   "label": "Total Registros",
+   "read_only": 1
   },
   {
    "fieldname": "detalle",
    "fieldtype": "Long Text",
-   "label": "Detalle"
+   "label": "Detalle",
+   "read_only": 1
   },
   {
    "fieldname": "error",
    "fieldtype": "Long Text",
-   "label": "Error"
+   "label": "Error",
+   "read_only": 1
   },
   {
    "description": "JSON crudo recibido del API de Walmart antes de cualquier procesamiento. Se accede desde el botón 'Ver payload original'.",

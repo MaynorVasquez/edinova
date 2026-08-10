@@ -1,5 +1,6 @@
 from collections import defaultdict
 from datetime import datetime
+from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from typing import Any
 
 import frappe
@@ -7,6 +8,8 @@ import frappe
 from .edinova_orden_venta import get_ordenes_venta
 
 logger = frappe.logger("edinova", allow_site=True, file_count=10)
+
+PRECISION_PRECIO = Decimal("0.000001")
 
 
 class EdinovaSyncError(frappe.ValidationError):
@@ -62,7 +65,7 @@ def _cargar_descuentos_indexados(item_codes: list[str]) -> dict[str, dict]:
 
 
 def _cargar_items_por_ean(eans: list[str]) -> dict[str, str]:
-    """Mapa ean (str) → item_code en una sola consulta.
+    """Mapa EAN → item_code activo; rechaza asociaciones ambiguas.
 
     El API de Walmart puede mandar el EAN como número; en BD el campo
     ``custom_ean`` es Data (string). Normalizamos ambos lados a str para
@@ -74,10 +77,30 @@ def _cargar_items_por_ean(eans: list[str]) -> dict[str, str]:
     eans_str = [str(e) for e in eans]
     rows = frappe.get_all(
         "Item",
-        filters={"custom_ean": ["in", eans_str]},
-        fields=["name", "custom_ean"],
+        filters={"custom_ean": ["in", eans_str], "disabled": 0},
+        fields=["name", "custom_ean", "disabled"],
     )
-    return {str(r["custom_ean"]): r["name"] for r in rows}
+    items_by_ean: dict[str, list[str]] = defaultdict(list)
+    for row in rows:
+        if not row.get("disabled"):
+            items_by_ean[str(row["custom_ean"])].append(row["name"])
+
+    duplicates = {
+        ean: sorted(item_codes)
+        for ean, item_codes in items_by_ean.items()
+        if len(item_codes) > 1
+    }
+    if duplicates:
+        detail = "; ".join(
+            f"EAN {ean}: {', '.join(item_codes)}"
+            for ean, item_codes in sorted(duplicates.items())
+        )
+        raise EdinovaSyncError(
+            "Existen EAN asociados a más de un Item activo. "
+            f"Corrija los datos maestros antes de sincronizar: {detail}."
+        )
+
+    return {ean: item_codes[0] for ean, item_codes in items_by_ean.items()}
 
 
 def _cargar_precios(item_codes: list[str], price_list: str) -> dict[str, float]:
@@ -104,6 +127,7 @@ def save_order(
     descuentos, items_por_ean, precios)."""
     numero_po = ov["purchaseOrderNumber"]["po"]
     gln = gln_item["gln"]
+    cliente = contexto["cliente"]
 
     logger.info(f"Procesando orden {numero_po} con GLN {gln}")
 
@@ -111,11 +135,10 @@ def save_order(
     dt = datetime.strptime(date_str, "%Y%m%d%H%M")
     po_date = dt.strftime("%Y-%m-%d")
 
-    if frappe.db.exists("Sales Order", {"po_no": numero_po, "custom_gln": gln}):
+    if _existe_orden_para_gln(numero_po, gln, cliente):
         logger.info(f"Orden {numero_po} con GLN {gln} ya existe, saltando")
         return
 
-    cliente = contexto["cliente"]
     price_list = contexto["price_list"]
     company = contexto["company"]
     dias_entrega = contexto["dias_entrega"]
@@ -203,7 +226,10 @@ def save_order(
         unit_precio = unit_price_por_ean.get(ean) or 0
         almacen = (descuentos.get(item_code, {}).get("almacen") or almacen_defecto)
         precio = calcular_precio_negociado(item_code, unit_precio, descuentos)
-        diferencia = precio - precio_lista
+        diferencia = _redondear_decimal(
+            _decimal(precio, "precio negociado")
+            - _decimal(precio_lista, "precio de lista")
+        )
         quantity = item_json["quantity"]
 
         sales_order.append("items", {
@@ -229,6 +255,20 @@ def save_order(
     logger.info(f"Insertando orden {numero_po} con {len(sales_order.items)} items")
     sales_order.insert(ignore_permissions=True)
     ordenes_json.append(sales_order_payload)
+
+
+def _existe_orden_para_gln(numero_po: str, gln: str, cliente: str) -> bool:
+    """Use PO + GLN as the idempotency key while keeping customers isolated."""
+    return bool(
+        frappe.db.exists(
+            "Sales Order",
+            {
+                "po_no": numero_po,
+                "custom_gln": gln,
+                "customer": cliente,
+            },
+        )
+    )
 
 
 def _cargar_configuracion() -> dict[str, Any]:
@@ -371,19 +411,22 @@ def _normalizar_orden(ov: dict, idx: int) -> dict:
     if not items:
         raise EdinovaSyncError(f"{ctx} (PO {pon['po']}): la orden no tiene items")
 
+    order_eans: set[str] = set()
     for j, item in enumerate(items):
         ictx = f"{ctx} (PO {pon['po']}) item #{j + 1}"
         if "ean" not in item or item.get("ean") in (None, ""):
             raise EdinovaSyncError(f"{ictx}: falta 'ean'")
         item["ean"] = str(item["ean"])
-        item["intCode"] = str(item.get("intCode") or "")
-        try:
-            item["quantity"] = int(item.get("quantity") or 0)
-        except (TypeError, ValueError) as e:
+        if item["ean"] in order_eans:
             raise EdinovaSyncError(
-                f"{ictx} (EAN {item['ean']}): 'quantity' no convertible a int "
-                f"(valor recibido: {item.get('quantity')!r})"
-            ) from e
+                f"{ictx}: EAN duplicado '{item['ean']}' en los items de la orden."
+            )
+        order_eans.add(item["ean"])
+        item["intCode"] = str(item.get("intCode") or "")
+        item["quantity"] = _entero_positivo(
+            item.get("quantity"),
+            f"{ictx} (EAN {item['ean']}) quantity",
+        )
         try:
             item["unitPrice"] = float(item.get("unitPrice") or 0)
         except (TypeError, ValueError) as e:
@@ -397,18 +440,21 @@ def _normalizar_orden(ov: dict, idx: int) -> dict:
         dctx = f"{ctx} (PO {pon['po']}) merchandisedistribution #{k + 1}"
         dist["gln"] = str(dist.get("gln") or "")
         dist["glnname"] = str(dist.get("glnname") or "")
+        distribution_eans: set[str] = set()
         for m, ditem in enumerate(dist.get("items") or []):
             mctx = f"{dctx} item #{m + 1}"
             if "ean" not in ditem or ditem.get("ean") in (None, ""):
                 raise EdinovaSyncError(f"{mctx}: falta 'ean'")
             ditem["ean"] = str(ditem["ean"])
-            try:
-                ditem["quantity"] = int(ditem.get("quantity") or 0)
-            except (TypeError, ValueError) as e:
+            if ditem["ean"] in distribution_eans:
                 raise EdinovaSyncError(
-                    f"{mctx} (EAN {ditem['ean']}): 'quantity' no convertible a int "
-                    f"(valor recibido: {ditem.get('quantity')!r})"
-                ) from e
+                    f"{mctx}: EAN duplicado '{ditem['ean']}' dentro del mismo GLN."
+                )
+            distribution_eans.add(ditem["ean"])
+            ditem["quantity"] = _entero_positivo(
+                ditem.get("quantity"),
+                f"{mctx} (EAN {ditem['ean']}) quantity",
+            )
         dist["items"] = dist.get("items") or []
     ov["merchandisedistribution"] = dists
 
@@ -559,16 +605,60 @@ def calcular_precio_negociado(
             "Campos descuentos", {"itemcode": item_code}, "iva"
         )
 
-    if iva is None:
-        iva = 0
+    precio_decimal = _decimal(unit_price, f"precio unitario del item '{item_code}'")
+    iva_decimal = _decimal(iva or 0, f"IVA del item '{item_code}'")
+    descuento_decimal = _decimal(
+        descuento or 0, f"descuento del item '{item_code}'"
+    )
 
-    factor_iva = 1 + (iva / 100)
-    precio_con_iva = unit_price * factor_iva
+    if precio_decimal < 0:
+        raise EdinovaSyncError(
+            f"El precio unitario del item '{item_code}' no puede ser negativo."
+        )
+    for label, value in (("IVA", iva_decimal), ("descuento", descuento_decimal)):
+        if value < 0 or value > 100:
+            raise EdinovaSyncError(
+                f"El {label} del item '{item_code}' debe estar entre 0 y 100."
+            )
 
-    if descuento is None:
-        return precio_con_iva
+    precio_con_iva = precio_decimal * (Decimal("1") + iva_decimal / Decimal("100"))
+    precio_final = precio_con_iva * (
+        Decimal("1") - descuento_decimal / Decimal("100")
+    )
+    return _redondear_decimal(precio_final)
 
-    return precio_con_iva * (1 - (descuento / 100))
+
+def _decimal(value: Any, field_label: str) -> Decimal:
+    """Convert an external numeric value without inheriting binary float noise."""
+    try:
+        result = Decimal(str(value))
+    except (InvalidOperation, TypeError, ValueError) as exc:
+        raise EdinovaSyncError(
+            f"{field_label.capitalize()} tiene un valor numérico inválido: {value!r}."
+        ) from exc
+    if not result.is_finite():
+        raise EdinovaSyncError(
+            f"{field_label.capitalize()} tiene un valor numérico inválido: {value!r}."
+        )
+    return result
+
+
+def _entero_positivo(value: Any, field_label: str) -> int:
+    quantity = _decimal(value, field_label)
+    if quantity != quantity.to_integral_value():
+        raise EdinovaSyncError(
+            f"{field_label.capitalize()} debe ser un entero; valor recibido: {value!r}."
+        )
+    if quantity <= 0:
+        raise EdinovaSyncError(
+            f"{field_label.capitalize()} debe ser mayor que cero; "
+            f"valor recibido: {value!r}."
+        )
+    return int(quantity)
+
+
+def _redondear_decimal(value: Decimal) -> float:
+    return float(value.quantize(PRECISION_PRECIO, rounding=ROUND_HALF_UP))
 
 
 def asignar_almacen(item_code: str) -> str | None:

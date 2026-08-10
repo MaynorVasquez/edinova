@@ -3,12 +3,14 @@
 
 import frappe
 from frappe.model.document import Document
+from redis.exceptions import LockError
 
 from edinova.api.erpnext_orden_venta import descargar_ordenes, procesar_ordenes
 
 logger = frappe.logger("edinova", allow_site=True, file_count=10)
 
 LOCK_KEY = "edinova:sync_lock"
+LOCK_OWNER_KEY = "edinova:sync_lock_owner"
 LOCK_TTL_SEC = 1800  # 30 minutos
 
 
@@ -83,43 +85,36 @@ def _sweep_stale_syncs(exclude: str | None = None) -> int:
     return len(stale)
 
 
-def _adquirir_lock(docname: str) -> str | None:
-    """Intenta tomar el lock global. Devuelve None si lo tomó, o el dueño actual.
-
-    Si encuentra un lock cuyo dueño ya no está en estado 'En proceso' (porque
-    el job anterior terminó pero el ``finally`` no llegó a liberarlo, p. ej.
-    por un ``bench restart`` o un OOM), lo considera estancado y lo sobrescribe.
-    """
+def _adquirir_lock(docname: str) -> tuple[object | None, str | None]:
+    """Acquire the global sync lock atomically and return lock plus current owner."""
     _sweep_stale_syncs(exclude=docname)
     cache = frappe.cache()
-    actual = cache.get_value(LOCK_KEY)
-    if actual:
-        actual_str = actual.decode() if isinstance(actual, bytes) else str(actual)
-        if actual_str == docname:
-            cache.set_value(LOCK_KEY, docname, expires_in_sec=LOCK_TTL_SEC)
-            return None
-        try:
-            owner_status = frappe.db.get_value(
-                "Edinova Sincronizar Ordenes de Venta", actual_str, "status"
-            )
-        except Exception:
-            owner_status = None
-        if owner_status == "En proceso":
-            return actual_str  # otro job genuinamente en curso
-        logger.warning(
-            f"Lock estancado de '{actual_str}' (status={owner_status!r}); "
-            f"liberando y tomando control para '{docname}'"
-        )
-    cache.set_value(LOCK_KEY, docname, expires_in_sec=LOCK_TTL_SEC)
-    return None
+    lock = cache.lock(
+        cache.make_key(LOCK_KEY),
+        timeout=LOCK_TTL_SEC,
+        blocking=False,
+    )
+    if not lock.acquire(blocking=False):
+        owner = cache.get_value(LOCK_OWNER_KEY, expires=True)
+        owner_str = owner.decode() if isinstance(owner, bytes) else str(owner or "")
+        return None, owner_str or "desconocido"
+
+    cache.set_value(LOCK_OWNER_KEY, docname, expires_in_sec=LOCK_TTL_SEC)
+    return lock, None
 
 
-def _liberar_lock(docname: str) -> None:
+def _liberar_lock(lock: object | None, docname: str) -> None:
+    if lock is None:
+        return
     cache = frappe.cache()
-    actual = cache.get_value(LOCK_KEY)
-    actual_str = actual.decode() if isinstance(actual, bytes) else str(actual or "")
-    if actual_str == docname:
-        cache.delete_value(LOCK_KEY)
+    try:
+        lock.release()
+    except LockError:
+        logger.warning(f"El lock de sincronización de '{docname}' ya no pertenece al job")
+    owner = cache.get_value(LOCK_OWNER_KEY, expires=True)
+    owner_str = owner.decode() if isinstance(owner, bytes) else str(owner or "")
+    if owner_str == docname:
+        cache.delete_value(LOCK_OWNER_KEY)
 
 
 def run_sync(docname: str, fecha_inicio: str, triggered_by: str | None = None) -> None:
@@ -130,7 +125,7 @@ def run_sync(docname: str, fecha_inicio: str, triggered_by: str | None = None) -
     """
     doc = frappe.get_doc("Edinova Sincronizar Ordenes de Venta", docname)
 
-    dueno = _adquirir_lock(docname)
+    lock, dueno = _adquirir_lock(docname)
     if dueno:
         doc.status = "Bloqueado"
         doc.error = (
@@ -177,7 +172,7 @@ def run_sync(docname: str, fecha_inicio: str, triggered_by: str | None = None) -
         frappe.db.commit()
 
     finally:
-        _liberar_lock(docname)
+        _liberar_lock(lock, docname)
         # Publicamos al room del usuario (auto-joined al conectar el socket) en vez
         # del room del doc, que requiere un doc_subscribe asíncrono y puede
         # perderse si el sync termina antes de que el cliente se suscriba.

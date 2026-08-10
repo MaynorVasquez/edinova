@@ -12,6 +12,16 @@ bench get-app $URL_OF_THIS_REPO --branch develop
 bench install-app edinova
 ```
 
+Después de instalar, abra **Edinova > Descuentos Negociados** y use el botón
+**Asistente de configuración**. Seleccione la empresa, el cliente, el impuesto y
+la sucursal que atenderá todos los pedidos. El asistente muestra una vista previa
+y sólo permite aplicar la plantilla cuando todos sus artículos tienen una
+coincidencia única.
+
+Los descuentos se distribuyen como una plantilla portable y no como fixtures de
+configuración. Por ello, ejecutar `bench migrate` no reemplaza la empresa, los
+almacenes ni los ajustes locales de cada sitio.
+
 ### Contributing
 
 This app uses `pre-commit` for code formatting and linting. Please [install pre-commit](https://pre-commit.com/#installation) and enable it for this repository:
@@ -28,11 +38,10 @@ Pre-commit is configured to use the following tools for checking and formatting 
 - prettier
 - pyupgrade
 
-### CI
+### Quality checks
 
-This app can use GitHub Actions for CI. The following workflows are configured:
+The following GitHub Actions workflow is configured:
 
-- CI: Installs this app and runs unit tests on every push to `develop` branch.
 - Linters: Runs [Frappe Semgrep Rules](https://github.com/frappe/semgrep-rules) and [pip-audit](https://pypi.org/project/pip-audit/) on every pull request.
 
 
