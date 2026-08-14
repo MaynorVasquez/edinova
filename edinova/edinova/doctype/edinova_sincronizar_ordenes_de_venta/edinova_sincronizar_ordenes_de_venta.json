@@ -34,9 +34,11 @@
    "read_only": 1
   },
   {
+   "description": "Resultado de la sincronización serializado como JSON legible.",
    "fieldname": "detalle",
-   "fieldtype": "Long Text",
+   "fieldtype": "Code",
    "label": "Detalle",
+   "options": "JSON",
    "read_only": 1
   },
   {

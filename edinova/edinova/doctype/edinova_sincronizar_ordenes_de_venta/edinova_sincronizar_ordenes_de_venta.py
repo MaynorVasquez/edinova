@@ -160,7 +160,11 @@ def run_sync(docname: str, fecha_inicio: str, triggered_by: str | None = None) -
             resultado = procesar_ordenes(ordenes_raw)
             doc.status = "Exitoso"
             doc.total_registros = resultado.get("total", 0)
-            doc.detalle = frappe.as_json(resultado.get("data", []))
+            doc.detalle = frappe.as_json(
+                resultado.get("data", {}),
+                indent=2,
+                ensure_ascii=False,
+            )
             doc.error = None
         except Exception:
             doc.status = "Error"
