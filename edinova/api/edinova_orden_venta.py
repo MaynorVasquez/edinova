@@ -63,7 +63,12 @@ def get_ordenes_venta(fecha_inicio: str) -> list[dict]:
 	if not isinstance(data, dict):
 		raise EdinovaAPIError("La respuesta de la API de Edinova no es un objeto JSON.")
 	if data.get("success") is not True:
-		api_message = str(data.get("message") or data.get("error") or "sin detalle")
+		api_message = str(
+			data.get("message")
+			or data.get("menssage")
+			or data.get("error")
+			or "sin detalle"
+		)
 		raise EdinovaAPIError(
 			f"La API de Edinova rechazó la consulta: {api_message[:300]}"
 		)

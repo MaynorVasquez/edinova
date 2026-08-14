@@ -81,6 +81,18 @@ class TestGetOrdenesVenta(FrappeTestCase):
 
 	@patch("edinova.api.edinova_orden_venta.get_config")
 	@patch("edinova.api.edinova_orden_venta.requests.get")
+	def test_success_false_accepts_api_menssage_typo(self, request_get, get_config):
+		get_config.return_value = self.config
+		request_get.return_value.json.return_value = {
+			"success": False,
+			"menssage": "Token vencido según API",
+		}
+
+		with self.assertRaisesRegex(EdinovaAPIError, "Token vencido según API"):
+			get_ordenes_venta("2026-08-10")
+
+	@patch("edinova.api.edinova_orden_venta.get_config")
+	@patch("edinova.api.edinova_orden_venta.requests.get")
 	def test_invalid_json_raises_api_error(self, request_get, get_config):
 		get_config.return_value = self.config
 		request_get.return_value.json.side_effect = ValueError("invalid json")
