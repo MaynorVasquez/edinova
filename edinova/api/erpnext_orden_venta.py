@@ -157,7 +157,6 @@ def save_order(
         "selling_price_list": price_list,
         "po_no": numero_po,
         "custom_gln": gln,
-        "disable_rounded_total": "1",
         "items": [],
     })
 
@@ -193,7 +192,6 @@ def save_order(
         "delivery_date": frappe.utils.add_days(frappe.utils.nowdate(), dias_entrega),
         "po_date": po_date,
         "selling_price_list": price_list,
-        "disable_rounded_total": "1",
         "items": [],
         "taxes_and_charges": impuestos.get("taxes_and_charges"),
         "taxes": impuestos.get("taxes"),
